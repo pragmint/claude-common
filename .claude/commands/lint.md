@@ -9,9 +9,9 @@ Auto-fix linting issues in the project by finding the pre-configured linter and 
 
 ## Steps
 
-1. Scan the codebase for evidence of a linter
-  a. If linter is found
-    1. Figure out the command required to run the linter such that changes are applied
-    2. Run that command
-  b. If no linter is found
-    1. Tell the user no linter has been found
+* Scan the codebase for evidence of a linter
+  * If a linter is found
+    * Figure out the command required to run the linter such that changes are applied
+    * Run that command
+  * If no linter is found
+    * Tell the user no linter has been found
