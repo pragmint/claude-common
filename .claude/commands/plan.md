@@ -27,6 +27,6 @@ Create a detailed plan document that outlines the problem, solution approach, an
   * Plan the order of implementation (tests first, then implementation)
   * Consider integration points and potential risks
 * Write the plan document
-  * Save the plan as `PLAN.md` in the project root
+  * Save the plan as `PLAN.md` in the .claude/planning/ directory
   * Include problem statement, solution approach, and detailed steps
   * Make the plan actionable for other agents to follow

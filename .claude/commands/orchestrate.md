@@ -30,17 +30,19 @@ The orchestrator follows a structured development process:
 - Uses `/plan` command to create a comprehensive plan document
 - Uses `analyst` agent for technical analysis and research
 - Breaks down complex tasks into manageable increments
+- Requires user approval of the plan before proceeding to the next step
 
 ### 3. Setup Phase
-- Uses `/branch` command to create a feature branch if needed
+- Uses `/branch` command to create a feature branch
 - Ensures clean working state
 
 ### 4. Development Cycle
 For each increment in the plan:
-1. Uses `unit-tester` agent to write failing tests
-2. Uses `incremental-implementer` agent to make tests pass
-3. Uses `careful-refactorer` agent to improve code quality
+1. Uses `unit-tester` agent to write a failing test
+2. Uses `incremental-implementer` agent to make all failing tests pass
+3. Uses `careful-refactorer` agent to improve code quality while keeping the test suite in a passing state
 4. Uses `/test`, `/build`, `/lint` commands to verify system health
+5. Reviews the document that the planning phase generated to see if there are more steps to take (going back to the beginning of the development cycle if so).
 5. Uses `/commit` command for atomic changes
 
 ### 5. Quality Gates
