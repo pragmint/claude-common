@@ -19,23 +19,43 @@ case "$command" in
   ls|list)   bash "$REPO_DIR/scripts/ls.sh" ;;
   install)
     BIN_DIR="$HOME/.local/bin"
-    mkdir -p "$BIN_DIR"
+    COMP_DIR="$HOME/.zsh/completions"
+    mkdir -p "$BIN_DIR" "$COMP_DIR"
+
     if [ -L "$BIN_DIR/skills" ] || [ -e "$BIN_DIR/skills" ]; then
       echo "Already installed at $BIN_DIR/skills"
     else
       ln -s "$REPO_DIR/skills.sh" "$BIN_DIR/skills"
       echo "Installed skills -> $REPO_DIR/skills.sh"
     fi
+
+    if [ -L "$COMP_DIR/_skills" ] || [ -e "$COMP_DIR/_skills" ]; then
+      echo "Already installed at $COMP_DIR/_skills"
+    else
+      ln -s "$REPO_DIR/completions/_skills" "$COMP_DIR/_skills"
+      echo "Installed completion -> $COMP_DIR/_skills"
+    fi
+
     if [[ ":$PATH:" != *":$BIN_DIR:"* ]]; then
       echo ""
       echo "Note: $BIN_DIR is not in your PATH."
-      echo "Add this to your shell config (~/.zshrc or ~/.bashrc):"
+      echo "Add this to your shell config (~/.zshrc):"
       echo ""
       echo '  export PATH="$HOME/.local/bin:$PATH"'
+    fi
+
+    if ! grep -qF 'fpath=(~/.zsh/completions' "$HOME/.zshrc" 2>/dev/null; then
+      echo ""
+      echo "Note: add this to ~/.zshrc before compinit for tab completion:"
+      echo ""
+      echo '  fpath=(~/.zsh/completions $fpath)'
+      echo '  autoload -U compinit && compinit'
     fi
     ;;
   uninstall)
     BIN_DIR="$HOME/.local/bin"
+    COMP_DIR="$HOME/.zsh/completions"
+
     if [ -L "$BIN_DIR/skills" ] && [ "$(readlink "$BIN_DIR/skills")" = "$REPO_DIR/skills.sh" ]; then
       rm "$BIN_DIR/skills"
       echo "Uninstalled $BIN_DIR/skills"
@@ -43,6 +63,13 @@ case "$command" in
       echo "Skipped: $BIN_DIR/skills exists but is not a symlink to this repo"
     else
       echo "Nothing to uninstall"
+    fi
+
+    if [ -L "$COMP_DIR/_skills" ] && [ "$(readlink "$COMP_DIR/_skills")" = "$REPO_DIR/completions/_skills" ]; then
+      rm "$COMP_DIR/_skills"
+      echo "Uninstalled $COMP_DIR/_skills"
+    elif [ -e "$COMP_DIR/_skills" ]; then
+      echo "Skipped: $COMP_DIR/_skills exists but is not a symlink to this repo"
     fi
     ;;
   *)

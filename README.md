@@ -17,10 +17,16 @@ cd ~/claude-common
 bash skills.sh install
 ```
 
-**3. Add `~/.local/bin` to your PATH** (if not already there)
+**3. Add `~/.local/bin` to your PATH and enable tab completion** (if not already there)
 
 ```sh
-echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
+# Add to ~/.zshrc
+export PATH="$HOME/.local/bin:$PATH"
+fpath=(~/.zsh/completions $fpath)
+autoload -U compinit && compinit
+```
+
+```sh
 source ~/.zshrc
 ```
 
