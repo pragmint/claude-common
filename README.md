@@ -34,9 +34,10 @@ skills link             # or pick individual items interactively
 ## CLI Reference
 
 ```
-skills link   [-a|--all]  Select and link a resource (--all links everything)
-skills unlink [-a|--all]  Select and unlink a resource (--all unlinks everything)
-skills select             Interactively choose what is linked/unlinked
+skills link   [-a|--all]  fzf single-select from unlinked items (--all links everything)
+skills unlink [-a|--all]  fzf single-select from linked items (--all unlinks everything)
+skills select             fzf multi-select to set full linked/unlinked state in one pass
+skills scrape             Pick a folder, find .claude resources inside, copy into repo
 skills ls|list            Show current link status of all resources
 skills install            Add 'skills' to ~/.local/bin
 skills uninstall          Remove 'skills' from ~/.local/bin

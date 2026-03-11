@@ -25,6 +25,7 @@ skills.sh     # CLI entry point — routes to scripts/
 - `link [-a|--all]` — fzf single-select from unlinked items; `--all` links everything
 - `unlink [-a|--all]` — fzf single-select from linked items; `--all` unlinks everything
 - `select` — fzf multi-select to set the full linked/unlinked state in one pass
+- `scrape` — pick a top-level folder in `$HOME`, find all `.claude` resources inside it (excluding symlinks back to this repo), fzf multi-select, then copy chosen items into the repo
 - `ls|list` — show current link status of all resources
 - `install` / `uninstall` — symlink/remove `skills` in `~/.local/bin`
 
