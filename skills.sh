@@ -15,6 +15,7 @@ case "$command" in
   link)      bash "$REPO_DIR/scripts/link.sh" "${@:2}" ;;
   unlink)    bash "$REPO_DIR/scripts/unlink.sh" "${@:2}" ;;
   select)    bash "$REPO_DIR/scripts/select.sh" ;;
+  scrape)    bash "$REPO_DIR/scripts/scrape.sh" ;;
   ls|list)   bash "$REPO_DIR/scripts/ls.sh" ;;
   install)
     BIN_DIR="$HOME/.local/bin"
@@ -50,7 +51,8 @@ case "$command" in
     echo "Commands:"
     echo "  link [-a|--all]  Select and link a resource (--all links everything)"
     echo "  unlink [-a|--all]  Select and unlink a resource (--all unlinks everything)"
-    echo "  select     Interactively select which resources to link"
+    echo "  select     Interactively choose what is linked/unlinked"
+  echo "  scrape     Copy items from ~/.claude into this repo"
     echo "  ls|list    Show current link status of all resources"
     echo "  install    Add 'skills' to ~/.local/bin for use anywhere"
     echo "  uninstall  Remove 'skills' from ~/.local/bin"
