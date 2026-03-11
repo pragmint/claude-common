@@ -12,8 +12,8 @@ REPO_DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
 command="${1:-}"
 
 case "$command" in
-  link)      bash "$REPO_DIR/scripts/link.sh" ;;
-  unlink)    bash "$REPO_DIR/scripts/unlink.sh" ;;
+  link)      bash "$REPO_DIR/scripts/link.sh" "${@:2}" ;;
+  unlink)    bash "$REPO_DIR/scripts/unlink.sh" "${@:2}" ;;
   select)    bash "$REPO_DIR/scripts/select.sh" ;;
   ls|list)   bash "$REPO_DIR/scripts/ls.sh" ;;
   install)
@@ -48,8 +48,8 @@ case "$command" in
     echo "Usage: skills <command>"
     echo ""
     echo "Commands:"
-    echo "  link       Symlink all resources to ~/.claude"
-    echo "  unlink     Remove all symlinks from ~/.claude"
+    echo "  link [-a|--all]  Select and link a resource (--all links everything)"
+    echo "  unlink [-a|--all]  Select and unlink a resource (--all unlinks everything)"
     echo "  select     Interactively select which resources to link"
     echo "  ls|list    Show current link status of all resources"
     echo "  install    Add 'skills' to ~/.local/bin for use anywhere"

@@ -1,41 +1,68 @@
 # Claude Common
 
-A collection of generally applicable Claude commands, agents, and settings that can be used across different software projects.
+A collection of reusable Claude Code commands, agents, and skills for use across projects.
 
-## Overview
+## Getting Started
 
-This repository provides a curated set of reusable components for Claude Code:
+**1. Clone the repo**
 
-- **Commands** - Common development workflows and tasks
-- **Agents** - Specialized AI assistants for specific domains
-
-## Structure
-
-```text
-.claude/
-├── commands/         # Reusable command definitions
-└── agents/           # Specialized agent configurations
+```sh
+git clone <repo-url> ~/claude-common
+cd ~/claude-common
 ```
 
-## Usage
+**2. Install the `skills` CLI**
 
-To use these components in your project:
+```sh
+bash skills.sh install
+```
 
-1. Copy the relevant `.claude/` directory contents to your project
-2. Customize commands and settings for your specific needs
-3. Leverage the pre-configured agents for specialized tasks
+**3. Add `~/.local/bin` to your PATH** (if not already there)
 
-## Available Commands
+```sh
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+```
 
-- **lint** - Code linting and formatting
-- **test** - Running test suites
-- **build** - Building and compilation
-- **commit** - Git commit workflows
-- **branch** - Branch management
-- **orchestrate** - Complex multi-step workflows
-- **plan** - Task planning and breakdown
-- **healthy-run** - Health checks and validation
+**4. Link resources to Claude Code**
+
+```sh
+skills link --all       # link everything at once
+skills link             # or pick individual items interactively
+```
+
+## CLI Reference
+
+```
+skills link   [-a|--all]  Select and link a resource (--all links everything)
+skills unlink [-a|--all]  Select and unlink a resource (--all unlinks everything)
+skills select             Interactively choose what is linked/unlinked
+skills ls|list            Show current link status of all resources
+skills install            Add 'skills' to ~/.local/bin
+skills uninstall          Remove 'skills' from ~/.local/bin
+```
+
+## Available Resources
+
+**Commands**
+- `branch` - Create a feature branch from an up-to-date main
+- `build` - Discover and run the project build system
+- `commit` - Create focused, atomic commits
+- `healthy-run` - Start the app and verify it's running correctly
+- `lint` - Find and run the project linter
+- `orchestrate` - Full TDD workflow coordinating agents and commands
+- `plan` - Create a structured plan document
+- `test` - Discover and run the test suite
+
+**Agents**
+- `analyst` - Reviews plans and code for quality issues
+- `unit-tester` - Writes failing tests (TDD red phase)
+- `incremental-implementer` - Makes failing tests pass (TDD green phase)
+- `careful-refactorer` - Improves code quality without breaking tests
+
+**Skills**
+- `pragmint` - Pragmint skill definitions
 
 ## Contributing
 
-Feel free to add new commands, agents, or settings that would be useful across multiple projects. Keep configurations general and avoid project-specific details.
+Keep all commands and agents general-purpose and project-agnostic. Do not embed project-specific details.
