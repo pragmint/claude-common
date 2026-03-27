@@ -15,7 +15,7 @@ case "$command" in
   link)      bash "$REPO_DIR/scripts/link.sh" "${@:2}" ;;
   unlink)    bash "$REPO_DIR/scripts/unlink.sh" "${@:2}" ;;
   select)    bash "$REPO_DIR/scripts/select.sh" ;;
-  scrape)    bash "$REPO_DIR/scripts/scrape.sh" ;;
+  scrape)    bash "$REPO_DIR/scripts/scrape.sh" "${@:2}" ;;
   ls|list)   bash "$REPO_DIR/scripts/ls.sh" ;;
   install)
     BIN_DIR="$HOME/.local/bin"

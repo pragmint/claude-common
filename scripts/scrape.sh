@@ -8,16 +8,30 @@ if ! command -v fzf &>/dev/null; then
   exit 1
 fi
 
-# Step 1: pick a top-level folder in $HOME to search
-fzf_exit=0
-search_root=$(find "$HOME" -maxdepth 1 -mindepth 1 -type d -not -name ".*" 2>/dev/null | \
-  sort | \
-  fzf --prompt="Search in > " \
-      --header="Select a folder to scrape for .claude resources  |  ESC: cancel") || fzf_exit=$?
+# Parse flags
+use_root=false
+for arg in "$@"; do
+  case "$arg" in
+    -r|--root) use_root=true ;;
+  esac
+done
 
-if [ "$fzf_exit" -ne 0 ] || [ -z "$search_root" ]; then
-  echo "Cancelled."
-  exit 0
+# Step 1: pick a top-level folder in $HOME to search (or use ~/.claude directly)
+if [ "$use_root" = true ]; then
+  search_root="$HOME"
+  _root_mode=true
+else
+  _root_mode=false
+  fzf_exit=0
+  search_root=$(find "$HOME" -maxdepth 1 -mindepth 1 -type d -not -name ".*" 2>/dev/null | \
+    sort | \
+    fzf --prompt="Search in > " \
+        --header="Select a folder to scrape for .claude resources  |  ESC: cancel") || fzf_exit=$?
+
+  if [ "$fzf_exit" -ne 0 ] || [ -z "$search_root" ]; then
+    echo "Cancelled."
+    exit 0
+  fi
 fi
 
 declare -a display_items=()  # lines shown in fzf: "name\tsource-label"
@@ -75,32 +89,40 @@ collect_from() {
   fi
 }
 
-# Find all .claude dirs within the selected folder
-while IFS= read -r claude_dir; do
-  if [[ "$claude_dir" == "$REPO_DIR"* ]]; then
-    continue
-  fi
-  label="$(basename "$(dirname "$claude_dir")")"
-  collect_from "$claude_dir" "$label"
-done < <(find "$search_root" -maxdepth 5 -name ".claude" -type d 2>/dev/null)
+# Find all .claude dirs within the selected folder (or use ~/.claude directly)
+if [ "$_root_mode" = true ]; then
+  collect_from "$HOME/.claude" "~/.claude"
+else
+  while IFS= read -r claude_dir; do
+    if [[ "$claude_dir" == "$REPO_DIR"* ]]; then
+      continue
+    fi
+    label="$(basename "$(dirname "$claude_dir")")"
+    collect_from "$claude_dir" "$label"
+  done < <(find "$search_root" -maxdepth 5 -name ".claude" -type d 2>/dev/null)
+fi
 
 if [ "${#display_items[@]}" -eq 0 ]; then
-  echo "No items found in $search_root that aren't already from this repo."
+  echo "No items found that aren't already from this repo."
   exit 0
 fi
 
-# Step 2: multi-select items to copy
-fzf_exit=0
-selected=$(printf '%s\n' "${display_items[@]}" | \
-  fzf --multi \
-      --prompt="Scrape > " \
-      --header="TAB: toggle  |  ENTER: copy to repo  |  ESC: cancel" \
-      --delimiter="	" \
-      --with-nth="1,2") || fzf_exit=$?
+# Step 2: multi-select items to copy (skipped in root mode — copy all)
+if [ "$_root_mode" = true ]; then
+  selected=$(printf '%s\n' "${display_items[@]}")
+else
+  fzf_exit=0
+  selected=$(printf '%s\n' "${display_items[@]}" | \
+    fzf --multi \
+        --prompt="Scrape > " \
+        --header="TAB: toggle  |  ENTER: copy to repo  |  ESC: cancel" \
+        --delimiter="	" \
+        --with-nth="1,2") || fzf_exit=$?
 
-if [ "$fzf_exit" -ne 0 ] || [ -z "$selected" ]; then
-  echo "Cancelled."
-  exit 0
+  if [ "$fzf_exit" -ne 0 ] || [ -z "$selected" ]; then
+    echo "Cancelled."
+    exit 0
+  fi
 fi
 
 echo ""
