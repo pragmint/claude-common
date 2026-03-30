@@ -2,7 +2,18 @@
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-CLAUDE_DIR="$HOME/.claude"
+# shellcheck source=_lib.sh
+source "$REPO_DIR/scripts/_lib.sh"
+
+claude_user=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --user|-u) claude_user="${2:-}"; shift 2 ;;
+    *) shift ;;
+  esac
+done
+
+pick_claude_dir "$claude_user"
 
 if ! command -v fzf &>/dev/null; then
   echo "Error: fzf is required. Install with: brew install fzf"

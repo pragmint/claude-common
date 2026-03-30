@@ -14,9 +14,9 @@ command="${1:-}"
 case "$command" in
   link)      bash "$REPO_DIR/scripts/link.sh" "${@:2}" ;;
   unlink)    bash "$REPO_DIR/scripts/unlink.sh" "${@:2}" ;;
-  select)    bash "$REPO_DIR/scripts/select.sh" ;;
+  select)    bash "$REPO_DIR/scripts/select.sh" "${@:2}" ;;
   scrape)    bash "$REPO_DIR/scripts/scrape.sh" "${@:2}" ;;
-  ls|list)   bash "$REPO_DIR/scripts/ls.sh" ;;
+  ls|list)   bash "$REPO_DIR/scripts/ls.sh" "${@:2}" ;;
   install)
     BIN_DIR="$HOME/.local/bin"
     COMP_DIR="$HOME/.zsh/completions"
