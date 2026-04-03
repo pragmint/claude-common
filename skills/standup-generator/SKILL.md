@@ -2,16 +2,18 @@
 name: standup-generator
 description: >
   Generates a formatted standup report from Linear tickets assigned to $LINEAR_CURRENT_USER.
-  Fetches live issue data (Todo, In Progress, In Review, Done), calculates time waiting for review,
+  Fetches live issue data (Todo, In Progress, In Review, Done, Dev Complete, Canceled, Duplicate), calculates time waiting for review,
   and formats a markdown report. Use whenever the user asks to generate, write, or create a standup
   report or standup update.
 ---
 
 ## Goal
 
-Fetch all Linear tickets assigned to the user defined at the
-`$LINEAR_CURRENT_USER` env var, in active states, then produce a clean markdown
+Fetch all Linear tickets assigned to the current user and produce a clean markdown
 standup report grouped by status.
+
+Do **not** pre-check or validate env vars before proceeding. Just attempt each step. If a
+command fails due to a missing or invalid env var, report the specific error and stop.
 
 ---
 
@@ -21,7 +23,7 @@ Run the following command to fetch all relevant issues in one shot. The query re
 titles, URLs, state names, GitHub PR attachments, and state-transition history:
 
 ```bash
-BODY=$(printf '{"query":"{ issues(filter: { assignee: { displayName: { eq: \"%s\" } }, state: { name: { in: [\"Todo\", \"In Progress\", \"In Review\", \"Done\"] } } }, first: 50) { nodes { id title url identifier state { name } attachments { nodes { title url } } history { nodes { createdAt fromState { name } toState { name } } } } } }"}' "$LINEAR_CURRENT_USER")
+BODY=$(printf '{"query":"{ issues(filter: { assignee: { displayName: { eq: \"%s\" } }, state: { name: { in: [\"Todo\", \"In Progress\", \"In Review\", \"Done\", \"Dev Complete\", \"Canceled\", \"Duplicate\"] } } }, first: 100) { nodes { id title url identifier state { name } attachments { nodes { title url } } history { nodes { createdAt fromState { name } toState { name } } } } } }"}' "$LINEAR_CURRENT_USER")
 
 curl -s "https://api.linear.app/graphql" \
   -H "Authorization: $LINEAR_API_KEY" \
@@ -47,8 +49,11 @@ Parse the JSON response. For each issue:
 3. **Group issues** by state in this order:
    - `In Review`
    - `In Progress`
+   - `Dev Complete`
    - `Todo`
    - `Done`
+   - `Canceled`
+   - `Duplicate`
 
    Omit any group that has no issues.
 
@@ -107,12 +112,43 @@ Notes:
 ---
 ```
 
+```
+# Dev Complete
+
+Title: {issue title}
+Linear: {issue url}
+Github: {github pr url — omit this line if no PR exists}
+Notes:
+
+---
+```
+
+```
+# Canceled
+
+Title: {issue title}
+Linear: {issue url}
+Notes:
+
+---
+```
+
+```
+# Duplicate
+
+Title: {issue title}
+Linear: {issue url}
+Notes:
+
+---
+```
+
 **Formatting rules:**
 - `Notes:` is always included but left blank — the user fills it in before posting.
 - Use `---` as a horizontal rule separator between issues within a group, but not after the last
   issue in a group.
-- `In Progress` issues do **not** have a `Time Waiting for Review` field.
-- `Todo` and `Done` issues do **not** have a `Time Waiting for Review` field.
+- `In Progress`, `Dev Complete`, `Todo`, `Done`, `Canceled`, and `Duplicate` issues do **not** have a `Time Waiting for Review` field.
+- `Canceled` and `Duplicate` issues do **not** have a `Github` field.
 - If a group has only one issue, no separator is needed.
 
 ---
