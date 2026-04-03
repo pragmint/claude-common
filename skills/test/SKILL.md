@@ -1,6 +1,11 @@
 ---
-allowed-tools: [Bash]
-description: Discovers and runs the test suite for the project
+name: test
+disable-model-invocation: true
+description: >
+  Discovers and runs the test suite for the project. Use this skill whenever
+  the user wants to run tests or verify the test suite passes. Trigger when
+  the user says "run tests", "run the tests", "test", "check tests", or
+  similar.
 ---
 
 # Test

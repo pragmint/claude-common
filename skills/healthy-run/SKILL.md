@@ -1,11 +1,17 @@
 ---
-allowed-tools: [Bash, WebFetch]
-description: Starts the application and verifies it's running correctly
+name: healthy-run
+disable-model-invocation: true
+description: >
+  Starts the application and verifies it's running correctly by performing
+  health checks and running automated tests. Use this skill whenever the user
+  wants to verify the system is healthy end-to-end. Trigger when the user says
+  "healthy run", "health check", "verify the app is running", "start and test",
+  or similar.
 ---
 
 # Healthy Run
 
-Start the application, perform health checks, and run automated tests to ensure the system is running properly. This command should run from scratch without paying attention to previous runs. *MAKE SURE TO RUN EACH STEP IN THE SECTION BELOW*
+Start the application, perform health checks, and run automated tests to ensure the system is running properly. This skill should run from scratch without paying attention to previous runs. *MAKE SURE TO RUN EACH STEP IN THE SECTION BELOW*
 
 ## Steps
 
@@ -29,7 +35,7 @@ Start the application, perform health checks, and run automated tests to ensure 
 
 4. Run automated tests
 
-- Determine how to run the project’s automated test suite.
+- Determine how to run the project's automated test suite.
 - Execute the tests and capture results.
 
 5. Report health status

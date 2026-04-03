@@ -1,6 +1,11 @@
 ---
-allowed-tools: [Bash]
-description: Discovers and runs the build process for the project
+name: build
+disable-model-invocation: true
+description: >
+  Discovers and runs the build process for the project. Use this skill whenever
+  the user wants to build the project, compile the code, or prepare it for
+  deployment or testing. Trigger when the user says "build", "compile", "run
+  the build", or similar.
 ---
 
 # Build

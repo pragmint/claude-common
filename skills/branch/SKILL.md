@@ -1,6 +1,11 @@
 ---
-allowed-tools: [Bash]
-description: Creates a new feature branch from an up-to-date main branch
+name: branch
+disable-model-invocation: true
+description: >
+  Creates a new feature branch from an up-to-date main branch. Use this skill
+  whenever the user wants to start work on a new feature, bug fix, or task and
+  needs a fresh branch. Trigger when the user says "create a branch", "start a
+  new branch", "branch off main", or similar.
 ---
 
 # Branch

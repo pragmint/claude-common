@@ -1,6 +1,11 @@
 ---
-allowed-tools: [Bash]
-description: Finds a linter if it exists and runs it
+name: lint
+disable-model-invocation: true
+description: >
+  Finds the project's linter and runs it with auto-fix enabled. Use this skill
+  whenever the user wants to lint or auto-fix code style issues. Trigger when
+  the user says "lint", "run the linter", "fix lint errors", "auto-fix style",
+  or similar.
 ---
 
 # Lint
