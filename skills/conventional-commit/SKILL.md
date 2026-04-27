@@ -43,6 +43,8 @@ changes exist in the working tree.
 Stage with specific paths, not `git add -A` or `git add .`, to avoid
 accidentally including secrets or unrelated files.
 
+If there are files such as local overrides for feature flags, do not commit those files.
+
 ---
 
 ## Step 3: Draft the commit message
